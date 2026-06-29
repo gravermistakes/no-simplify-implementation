@@ -49,7 +49,7 @@ external system. If it didn't, it doesn't go in.
 
 ## What this code actually is (and is not)
 
-| Component | What it REALLY does | What it does NOT do |
+| Component | What it REALLY does | What it does NOT - BUT SHOULD - do |
 |---|---|---|
 | `aes_core` (ECS) | In-memory data structures: workers, tasks, an event list, a queue, a token-cost ledger. | Run anything autonomously; persist; coordinate real infrastructure. |
 | `LeadDiscoveryWorker` | Calls real GitHub / NVD APIs and returns the facts they return. | Decide anyone will pay, or contact anyone. |
