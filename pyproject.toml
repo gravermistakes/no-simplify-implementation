@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autonomous-entity-system"
+version = "0.1.0"
+description = "Revenue-generating autonomous entity using ECS architecture with single AI orchestrator and self-organizing worker pool"
+
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = [
+    "anthropic>=0.21.0",
+    "pydantic>=2.0.0",
+]
+
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+authors = [
+    { name = "Autonomous Entity System Contributors" },
+]
+
+[project.urls]
+Homepage = "https://github.com/gravermistakes/autonomous-entity-system"
+Repository = "https://github.com/gravermistakes/autonomous-entity-system"
+"Bug Tracker" = "https://github.com/gravermistakes/autonomous-entity-system/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+aes_core = ["py.typed"]

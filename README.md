@@ -1,68 +1,161 @@
-# No-Simplify Implementation Skill
-[中文](README_CN.md)
+# Autonomous Entity System (AES)
 
-## **No**` // Simplified implementation`, **No**` // Omitted here`, **No` // Simple implementation is used here... actual needs...`!
-**Industrial-Grade Integrity Enforcement Protocol** — Absolutely no acceptance of any form of laziness, placeholders, simplifications, or toy-level demos.
+A revenue-generating autonomous entity using Entity-Component-System (ECS) architecture.
 
-## Introduction
+## Vision
 
-`no-simplify-implementation` is a high-constraint Skill designed specifically for code generation scenarios. It forces the AI to produce **100% complete, production-ready, and ready-to-deploy** code, completely eradicating TODOs, FIXMEs, "...", empty exception handling, empty functions, mock implementations, and any traces of "simplified demonstration."
+Single AI orchestrator (CEO/CTO/CFO/COO) managing a self-organizing worker pool to maximize profit.
 
-Unlike most "code assistance" tools on the market, this Skill has a built-in **hybrid dynamic + static** rigorous analyzer (including AST parsing, structural metrics, and heuristic mock detection), capable of performing industrial-grade integrity verification immediately after generation. Only code that passes the linter (exit code 0) is considered qualified.
+**Core principles:**
+- **Minimal interference**: AI only intervenes when needed
+- **Token economy aware**: Every decision tracked for ROI
+- **Worker self-organization**: Capability-based task assignment
+- **Event-driven**: Pure event-based coordination, no direct system calls
+- **Deterministic execution**: Workers execute component patterns, not LLM prompts
 
-### Core Philosophy
+## Architecture
 
-Existing Skills and projects often boast "conciseness + guaranteed robustness," which sounds professional but actually provides more opportunities for models to take advantage. Those Skill projects that claim to have beautiful code structures and shout loud slogans (frequently using terms like "industrial grade" or "enterprise level"), while in reality being just toy-level demos, are precisely what give the most room for lazy implementation to survive—appearing clean and tidy on the surface, while being empty inside, always leaving "to be added later" or a pretty comment where robust logic is truly needed. This "elegant laziness" is the most dangerous. **We choose the opposite:** we would rather write one extra line of real logic than accept one line of seemingly refined nonsense.
+### Entities
 
-## Features
+- **Workers** – Independent executors with self-advertised capabilities
+- **Tasks** – Units of work created by AI, executed by workers
+- **Capabilities** – Deterministic patterns workers can perform
 
-- **Multi-language Laziness Detection**: Supports mainstream languages such as Python, JS/TS, Go, Java, C/C++, etc.
-- **Context-Aware Lexer**: Distinguishes between strings, comments, and real code to avoid false positives.
-- **Hardcore Structural Analyzer**: Detects empty exceptions, empty functions, constant returns, print-only mock implementations, and "complexly named" functions with abnormally low complexity.
-- **Full Coverage of Chinese/English/Symbols**: Includes various placeholders such as "omitted here," "simplified implementation," "for simplicity," "...", etc.
-- **Incremental Repair Loop**: Locates, edits, and re-verifies issues immediately upon discovery until passing.
-- **Parallel Scanning + Rich Reporting**: Supports directory batch scanning, JSON output, and colored terminal reports.
+### Components
 
-## Installation and Usage (OpenClaw Environment)
+- **TaskComponent** – Schema for work (what a task looks like)
+- **WorkerComponent** – Schema for capability (what a worker offers)
+- **ComponentRegistry** – Central registry of all available work patterns
 
-```bash clawhub install no-simplify-implementation
+### Systems
 
-``` Manually run `/no-simplify-implementation` during the dialog (the model will not call it automatically)
+- **AIOrchestrator** – Single AI making strategic decisions (minimal interference)
+- **EventStream** – Event bus for reactive coordination
+- **TaskQueue** – Priority queue of work
+- **EconomicsTracker** – ROI tracking for every action
+- **AutonomousEntityOrchestrator** – Main orchestration loop
 
-### Recommended Workflow
+## Project Structure
 
-1. Activate this Skill before any task that requires code generation.
-
-2. The model begins writing industrial-grade code.
-
-3. Deliver to the user (you) only after the entire project has passed a final scan.
-
-**Core linter command** (in the workspace directory):
-```bash
-python3 skills/no-simplify-implementation/scripts/main.py workspace/
-# Or for a single file
-python3 skills/no-simplify-implementation/scripts/main.py workspace/yourfile.py
+```
+src/aes_core/
+├── __init__.py                 # Main exports
+├── entities.py                 # Worker, Task, Capability
+├── components.py               # TaskComponent, WorkerComponent, Registry
+├── ai_orchestrator.py          # AIOrchestrator (CEO brain)
+├── event_stream.py             # Event bus
+├── task_queue.py               # Priority queue
+├── economics.py                # Cost/value tracking
+└── orchestration.py            # Main loop + coordination
 ```
 
-## Use Cases
+## Quick Start
 
-- Development of large-scale system components.
-- Implementation of production-grade scripts / services / toolchains.
-- Refactoring legacy code with a requirement for total elimination of technical debt.
-- Teams or individuals who need to gatekeep the quality of AI output.
+```python
+from aes_core import (
+    AutonomousEntityOrchestrator,
+    Worker,
+    WorkerCapability,
+    TaskComponent,
+)
 
-## Why You Need It
+# Create orchestrator
+aes = AutonomousEntityOrchestrator(token_budget=1_000_000)
 
-Because most AI-generated code, under the packaging of "concise and elegant," cannot actually withstand scrutiny. Once it encounters a real production environment (boundary conditions, error handling, resource management, configuration loading), it immediately reveals its toy nature.
+# Register task components (what work looks like)
+security_audit = TaskComponent(
+    name="run_security_audit",
+    description="Scan code for vulnerabilities",
+    input_schema={"repo_url": "string"},
+    output_schema={"findings": "array"},
+    cost_estimate=100,
+)
+aes.register_component(security_audit)
 
-The purpose of `no-simplify-implementation` is to kill such "looks like, but isn't" code directly before delivery. It accepts no compromises, no "demonstration purposes," and no "to be improved later." It only accepts a complete implementation that is **runnable, maintainable, and deployable.**
+# Register workers
+worker = Worker(name="security_scanner")
+worker.add_capability(
+    WorkerCapability(name="run_security_audit", cost_per_execution=100)
+)
+aes.register_worker(worker)
 
-## License and Contribution
+# Create tasks
+task = aes.create_task(
+    component_name="run_security_audit",
+    parameters={"repo_url": "https://github.com/example/repo"},
+    expected_value=500,  # Revenue
+    expected_cost=100,   # Tokens
+)
 
-MIT License. PRs to enhance detection rules or support more languages are welcome.
+# Run orchestration
+aes.iteration()
+```
 
----
+## ECS Model Explained
 
-**After using this Skill, what you deliver will no longer be "code that looks good," but a truly industrial-grade, complete implementation that can withstand scrutiny.**
+**Entity Component System:**
 
-Welcome to strictly execute it in your actual projects — it will make you (and the model) become more honest.
+- **Entities** – Workers and tasks (lightweight, just IDs + data containers)
+- **Components** – Attachments defining capabilities/patterns
+- **Systems** – Logic that operates on entities with matching components
+
+**In AES:**
+
+- Entities: Workers (have `Capability` components), Tasks (have `TaskComponent` components)
+- Systems: AI orchestrator, event stream, task queue, executor
+- No direct calls: everything communicates via events
+
+## Integration with Existing Projects
+
+- **Paperclip** – Task scheduling/state management
+- **agileagents** – Worker execution engine (serverless)
+- **MoMoA** – AI consensus/debate system
+- **Shoggoth Foundry** – Self-hosting capability
+- **Actor Runtime** – Distributed task execution
+- **Security repos** – Components for security auditing
+
+## Economics Model
+
+Every action is tracked:
+
+```python
+# Costs
+- Worker execution: tokens spent
+- AI decision-making: tokens for LLM calls
+- Monitoring: infrastructure overhead
+
+# Value
+- Completed tasks: revenue from clients
+- Cost savings: operational efficiency
+- Data value: insights produced
+
+# ROI = (Value - Cost) / Cost
+```
+
+## Token Economy
+
+AI is aware of:
+- Total token budget (optional cap)
+- Tokens spent per decision/action
+- ROI of each task
+- Cost vs. wealth produced trade-offs
+
+Minimal interference: AI only investigates or creates tasks if the potential impact justifies the token cost.
+
+## Next Steps
+
+1. Integrate with LLM provider (Claude API)
+2. Define task components for security/deployment/analysis
+3. Connect to existing projects (Paperclip, agileagents, etc.)
+4. Implement worker pool management
+5. Test end-to-end workflow
+
+## References
+
+- Entity-Component-System pattern: Industry standard for game engines, now applied to autonomous systems
+- Token economy: Anthropic token counting + ROI tracking
+- Event-driven architecture: Proven pattern for loosely coupled systems
+
+## License
+
+MIT
