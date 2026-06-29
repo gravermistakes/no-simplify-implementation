@@ -15,6 +15,7 @@ from .ai_orchestrator import AIOrchestrator, Decision
 from .economics import EconomicsTracker, ResourceCost, ValueProduced
 from .event_stream import Event, EventStream, EventType
 from .task_queue import TaskQueue, TaskPriority
+from .orchestration import AutonomousEntityOrchestrator, SystemState
 
 __version__ = "0.1.0"
 __all__ = [
@@ -34,4 +35,6 @@ __all__ = [
     "EventType",
     "TaskQueue",
     "TaskPriority",
+    "AutonomousEntityOrchestrator",
+    "SystemState",
 ]

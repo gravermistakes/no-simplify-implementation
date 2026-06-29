@@ -92,8 +92,8 @@ class Task:
     and emit events on completion.
     """
 
-    id: str = field(default_factory=lambda: str(uuid4()))
     component_name: str  # What component/pattern to execute
+    id: str = field(default_factory=lambda: str(uuid4()))
     state: TaskState = TaskState.PENDING
 
     # Inputs for execution
