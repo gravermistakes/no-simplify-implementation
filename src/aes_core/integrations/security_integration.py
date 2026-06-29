@@ -61,68 +61,23 @@ class SecurityComponent:
 
     def execute(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Execute security scan.
+        Intended entry point for a real scan. NOT IMPLEMENTED YET.
 
-        Parameters:
-        - target: code repo, file path, or URL
-        - scan_type: "preventive", "deep", "offensive"
+        This must call the actual engine (Visa SAST / Invoke-Atomic / skills)
+        and return that engine's real findings. Until that is wired up, it
+        honestly reports that no scan ran instead of inventing vulnerabilities
+        against `target`. (See README "No Make-Believe", rule 6.)
         """
         target = parameters.get("target", "")
-        scan_type = parameters.get("scan_type", "preventive")
-
-        # Simulate scan (real implementation calls actual engines)
-        findings = self._simulate_scan(target, scan_type)
-
         return {
             "target": target,
-            "scan_type": scan_type,
             "engine": self.engine.value,
-            "findings_count": len(findings),
-            "findings": [f.__dict__ for f in findings],
-            "status": "completed",
+            "findings_count": 0,
+            "findings": [],
+            "status": "not_implemented",
+            "warning": "No real scanner is wired up. This returns zero findings "
+                       "rather than fabricating any. Implement the engine call here.",
         }
-
-    def _simulate_scan(
-        self, target: str, scan_type: str
-    ) -> List[UnifiedFinding]:
-        """Simulate scan results."""
-        findings = []
-
-        if self.engine == FindingSource.SAST:
-            findings.append(
-                UnifiedFinding(
-                    id="sast_001",
-                    title="SQL Injection Vulnerability",
-                    description=f"Potential SQL injection in {target}",
-                    severity=FindingSeverity.HIGH,
-                    source=FindingSource.SAST,
-                    cwe_id="89",
-                )
-            )
-
-        elif self.engine == FindingSource.OFFENSIVE:
-            findings.append(
-                UnifiedFinding(
-                    id="offensive_001",
-                    title="Weak Authentication",
-                    description=f"Authentication gap found in {target}",
-                    severity=FindingSeverity.CRITICAL,
-                    source=FindingSource.OFFENSIVE,
-                )
-            )
-
-        elif self.engine == FindingSource.SKILLS:
-            findings.append(
-                UnifiedFinding(
-                    id="skills_001",
-                    title="Missing Security Headers",
-                    description=f"Security headers not configured in {target}",
-                    severity=FindingSeverity.MEDIUM,
-                    source=FindingSource.SKILLS,
-                )
-            )
-
-        return findings
 
 
 class UnifiedSecurityTool:
@@ -175,11 +130,13 @@ class UnifiedSecurityTool:
 
         return {
             "target": target,
-            "timestamp": "2024-06-29T00:00:00Z",
             "engines_run": engines_to_run,
             "total_findings": len(unique_findings),
             "findings": list(unique_findings.values()),
             "severity_breakdown": self._severity_breakdown(list(unique_findings.values())),
+            "status": "not_implemented",
+            "warning": "No real scanners are wired up; total_findings reflects that, "
+                       "not a clean bill of health.",
         }
 
     def _severity_breakdown(self, findings: List[Dict[str, Any]]) -> Dict[str, int]:
